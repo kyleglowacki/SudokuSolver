@@ -1,37 +1,17 @@
 import sudoku_utils
 
-def sudoku_rule_last_in_row(grid):
+def sudoku_rule_only_choice(grid):
     updates = False
     # loop over rows.
     for row in range(9):
-        nums = set()
         for col in range(9):
-            nums.add(grid[row][col])
-        # check and see if 8/9 of the row are decide
-        if len(nums) == 8:
-            for val in range(1,10):
+            if len(grid[row][col].get_possible_digits()) == 1:
                 # if so.. mark blank with missing number.
-                if val not in nums:
-                    for col in range(9):
-                        if grid[row][col] == None:
-                            grid = set_digit_on_grid(grid, row, col, val)
-                            updates = True
+                grid = set_digit_on_grid(grid, row, col, grid[row][col].get_possible_digits()[0])
+                updates = True
     return updates, grid
 
-def sudoku_rule_last_in_col(grid):
-    updates = False
-    # loop over rows.
-    for col in range(9):
-        nums = set()
-        for row in range(9):
-            nums.add(grid[row][col])
-        # check and see if 8/9 of the row are decide
-        if len(nums) == 8:
-            for val in range(1,10):
-                # if so.. mark blank with missing number.
-                if val not in nums:
-                    for row in range(9):
-                        if grid[row][col] == None:
-                            grid = set_digit_on_grid(grid, row, col, val)
-                            updates = True
-    return updates, grid
+# only one blank in row can be a particular digit
+# only one blank in col can be a particular digit
+# only one blank in box can be a particular digit
+
