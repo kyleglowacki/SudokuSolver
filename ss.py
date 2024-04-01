@@ -1,3 +1,4 @@
+import inspect
 import json
 import sys
 
@@ -125,7 +126,28 @@ def is_sudoku_solved(grid):
             if not is_valid_set(box):
                 return False
     return True
-  
+
+def register_rules():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    rule_files = [file for file in os.listdir(current_dir) if file.endswith('.py') and file != __file__]
+
+    rule_functions = []
+    for file in rule_files:
+        module_name = os.path.splitext(file)[0]
+        module_path = os.path.join(current_dir, file)
+
+        try:
+            module = __import__(module_name)
+            members = inspect.getmembers(module)
+            for name, member in members:
+                if name.startswith('sudoku_rule_') and inspect.isfunction(member):
+                    rule_functions.append(member)
+        except Exception as e:
+            print(f"Failed to import module {module_name}: {e}")
+
+    return rule_functions
+
+
 ex = """
 {
   "grid": [
@@ -166,8 +188,9 @@ def main():
     # Print the resulting grid
     print_grid(grid)
 
-    # Initialize the list of rule functions
-    rule_functions = [rule_1, rule_2]
+    # Initialize the list of rule functions from files in the same directory
+    rule_functions = register_rules()
+    # rule_functions = [rule_1, rule_2]
 
     # Call each rule function and store the changes and updated grid
     any_updates = False
