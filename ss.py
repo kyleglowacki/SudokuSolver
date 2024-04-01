@@ -2,12 +2,13 @@ import inspect
 import json
 import sys
 
+import sudoku_utils as su
 
 # Also need to call to exclude set digits from all the various other cells that it is no longer possible for
 def read_puzzle_from_json(json_string):
     data = json.loads(json_string)
     grid_data = data['grid']
-    grid = [[Cell(grid_data[i][j]) if grid_data[i][j] is not None else Cell() for j in range(9)] for i in range(9)]
+    grid = [[su.Cell(grid_data[i][j]) if grid_data[i][j] is not None else su.Cell() for j in range(9)] for i in range(9)]
     return grid
 
 
@@ -18,7 +19,7 @@ def check_grid_validity(grid):
         if len(row) != 9:
             return False
         for cell in row:
-            if not isinstance(cell, Cell):
+            if not isinstance(cell, su.Cell):
                 return False
             if cell.get_digit() is None:
                 pass
