@@ -8,7 +8,8 @@ class Cell:
     def set_digit(self, digit):
         self.digit = digit
         self.possible_digits = set()
-
+    def clear_possible_digit(self):
+        self.possible_digits = set()
     def remove_possible_digit(self, digit):
         self.possible_digits.discard(digit)
 
@@ -34,7 +35,9 @@ def get_row(grid, row):
     return grid[row]
 
 def set_digit_on_grid(grid, i, j, digit):
+    print(f"Setting  {i},{j} to {digit} when could be {grid[i][j].get_possible_digits()}")
     grid[i][j].set_digit(digit)
+    grid[i][j].clear_possible_digit()
     if digit is not None:
         for k in range(9):
             grid[i][k].remove_possible_digit(digit)  # Remove digit from row
