@@ -151,21 +151,23 @@ def main():
     # rule_functions = [rule_1, rule_2]
 
     # Call each rule function and store the changes and updated grid
-    any_updates = False
-    for rule_func in rule_functions:
-        changes_made, updated_grid = rule_func(grid)
-        any_updates = any_updates or changes_made
+    any_updates = True
+    while any_updates:
+        any_updates = False
+        for rule_func in rule_functions:
+            changes_made, updated_grid = rule_func(grid)
+            any_updates = any_updates or changes_made
 
-    # figure out if done
-    if is_sudoku_solved(grid):
-        print("Final solution reached.")
-        print_grid(grid)
-        exit()
+        # figure out if done
+        if is_sudoku_solved(grid):
+            print("Final solution reached.")
+            print_grid(grid)
+            exit()
   
-    if not any_updates:
-        print("No updates were made this cycle... this is as far as the solver can go")
-        print_grid(grid)
-        exit()
+        if not any_updates:
+            print("No updates were made this cycle... this is as far as the solver can go")
+            print_grid(grid)
+            exit()
 
 if __name__ == "__main__":
     main()
