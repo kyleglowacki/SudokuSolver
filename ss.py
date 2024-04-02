@@ -1,5 +1,7 @@
+import argparse
 import inspect
 import json
+import os
 import sys
 
 import sudoku_utils as su
@@ -13,20 +15,24 @@ def read_puzzle_from_json(json_string):
 
 
 def check_grid_validity(grid):
+    print(grid)
     if len(grid) != 9:
+        print("Number of rows is not 9")
         return False
     for row in grid:
         if len(row) != 9:
+            print("Number of cols in row is not 9")
             return False
         for cell in row:
             if not isinstance(cell, su.Cell):
+                print("Error converting item to cell")
                 return False
             if cell.get_digit() is None:
                 pass
-            if cell.get_digit() < 1:
+            elif cell.get_digit() < 1:
                 print("Invalid value.. less than one")
                 return False
-            if cell.get_digit() > 9:
+            elif cell.get_digit() > 9:
                 print("Invalid value.. greater than nine")
                 return False
     return True
@@ -44,7 +50,7 @@ def mark_initial_values(grid):
         for j in range(9):
             digit = grid[i][j].get_digit()
             if digit is not None:
-                grid = set_digit_on_grid(grid, i,j,digit)
+                grid = su.set_digit_on_grid(grid, i,j,digit)
     return grid
 
 def is_valid_set(numbers):
@@ -116,12 +122,15 @@ ex = """
 #row_7 = get_row(grid, 7)
 #column_3 = get_column(grid, 3)
 def main():
-    # Check if a JSON string is provided as a command-line argument
-    if len(sys.argv) < 2:
-        print("Please provide a JSON string as a command-line argument.")
-        return
 
-    json_string = sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--puzzle", required=True, nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+    
+    json_string = "".join(args.puzzle)
+    print(json_string)
+    json_string = '{"grid": ' + json_string + '}'
+    print(json_string)
 
     # Call the read_puzzle_from_json function to get the grid
     grid = read_puzzle_from_json(json_string)
