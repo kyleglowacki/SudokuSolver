@@ -15,7 +15,6 @@ def read_puzzle_from_json(json_string):
 
 
 def check_grid_validity(grid):
-    print(grid)
     if len(grid) != 9:
         print("Number of rows is not 9")
         return False
@@ -102,25 +101,6 @@ def register_rules():
 
     return rule_functions
 
-
-ex = """
-{
-  "grid": [
-    [5, null, null, 9, null, null, null, null, 1],
-    [null, null, null, null, 5, 1, null, null, null],
-    [7, null, null, null, null, null, null, 4, 6],
-    [null, null, null, 8, null, null, 5, null, null],
-    [null, 1, null, null, null, null, null, 2, null],
-    [null, null, 3, null, null, 5, null, null, null],
-    [6, 7, null, null, null, null, null, null, 2],
-    [null, null, null, 3, 4, null, null, null, null],
-    [2, null, null, null, null, 6, null, null, 7]
-  ]
-}
-"""
-
-#row_7 = get_row(grid, 7)
-#column_3 = get_column(grid, 3)
 def main():
 
     parser = argparse.ArgumentParser()
@@ -128,9 +108,7 @@ def main():
     args = parser.parse_args()
     
     json_string = "".join(args.puzzle)
-    print(json_string)
     json_string = '{"grid": ' + json_string + '}'
-    print(json_string)
 
     # Call the read_puzzle_from_json function to get the grid
     grid = read_puzzle_from_json(json_string)
