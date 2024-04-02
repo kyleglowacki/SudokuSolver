@@ -10,7 +10,7 @@ import sudoku_utils as su
 def read_puzzle_from_json(json_string):
     data = json.loads(json_string)
     grid_data = data['grid']
-    grid = [[su.Cell(grid_data[i][j]) if grid_data[i][j] is not None else su.Cell() for j in range(9)] for i in range(9)]
+    grid = [[su.Cell(grid_data[i][j], i, j) if grid_data[i][j] is not None else su.Cell(None, i, j) for j in range(9)] for i in range(9)]
     return grid
 
 
