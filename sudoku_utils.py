@@ -1,6 +1,8 @@
 class Cell:
-    def __init__(self, digit=None):
+    def __init__(self, digit=None, row=0, col=0):
         self.digit = digit
+        self.row = row
+        self.col = col
         self.possible_digits = set(range(1, 10)) if digit is None else set()
 
     def set_digit(self, digit):
@@ -12,7 +14,10 @@ class Cell:
 
     def get_digit(self):
         return self.digit
-
+    def get_row(self):
+        return self.row
+    def get_column(self):
+        return self.col
     def get_possible_digits(self):
         return self.possible_digits
       
