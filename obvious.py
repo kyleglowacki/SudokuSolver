@@ -1,5 +1,14 @@
 import sudoku_utils as su
 
+def sudoku_rule_error(grid):
+    for row in range(9):
+        for col in range(9):
+            if grid[row][col].get_digit() is None:
+                if len(grid[row][col].get_possible_digits()) == 0:
+                    print(f"ERROR - {row},{col} has no options left.")
+                    return False, grid
+    return False, grid
+
 # Because possible digits is maintained, this rule tends to catch nearly all
 # digits while most other rules will only update the list of possible digits
 def sudoku_rule_only_choice(grid):
@@ -20,7 +29,7 @@ def sudoku_rule_only_choice(grid):
 
 # Return true if c1 and c2 are different cells.
 def diff(c1, c2):
-    return not ((c1.get_row() == c2.get_row()) and (c1.get_column() == c2.get_column))
+    return not ((c1.get_row() == c2.get_row()) and (c1.get_column() == c2.get_column()))
 
 def same_possible(c1, c2):
     pds2 = c2.get_possible_digits()
@@ -40,6 +49,7 @@ def process_cells(cells):
                 if len(c2.get_possible_digits()) == 2:
                     if diff(c1, c2):
                         if same_possible(c1, c2):
+                            print(f"Found {c1.get_row()},{c1.get_column()} and {c2.get_row()},{c2.get_column()} are the same pair {c1.get_possible_digits()}")
                             digits = list(c2.get_possible_digits())
                             return True, digits[0], digits[1]
             
@@ -60,9 +70,11 @@ def sudoku_rule_pairs_in_row(grid):
                 col = c.get_column()
                 if len(grid[row][col].get_possible_digits()) > 2:
                     if d1 in grid[row][col].get_possible_digits():
+                        print(f"Remove {d1} from {row},{col}")
                         grid[row][col].remove_possible_digit(d1)
                         updates = True
                     if d2 in grid[row][col].get_possible_digits():
+                        print(f"Remove {d2} from {row},{col}")
                         grid[row][col].remove_possible_digit(d2)
                         updates = True
     return updates, grid
