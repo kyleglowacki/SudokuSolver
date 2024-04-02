@@ -41,3 +41,4 @@ def set_digit_on_grid(grid, i, j, digit):
                 for y in range(box_col, box_col + 3):
                     grid[x][y].remove_possible_digit(digit)  # Remove digit from box
     return grid
+
