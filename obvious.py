@@ -28,8 +28,18 @@ def sudoku_rule_only_choice(grid):
 # only one blank in box can be a particular digit
 
 # Return true if c1 and c2 are different cells.
-def diff(c1, c2):
-    return not ((c1.get_row() == c2.get_row()) and (c1.get_column() == c2.get_column()))
+def diff2(c1, c2):
+    if (c1.get_row() == c2.get_row()) and (c1.get_column() == c2.get_column()):
+        return False
+    return True
+def diff3(c1, c2, c3):
+    if (c1.get_row() == c2.get_row()) and (c1.get_column() == c2.get_column()):
+        return False
+    if (c1.get_row() == c3.get_row()) and (c1.get_column() == c3.get_column()):
+        return False
+    if (c3.get_row() == c2.get_row()) and (c3.get_column() == c2.get_column()):
+        return False
+    return True
 
 def same_possible(c1, c2):
     pds2 = c2.get_possible_digits()
@@ -47,7 +57,7 @@ def process_cells(cells):
             # Found a start.... look for a match
             for c2 in cells:
                 if len(c2.get_possible_digits()) == 2:
-                    if diff(c1, c2):
+                    if diff2(c1, c2):
                         if same_possible(c1, c2):
                             print(f"Found {c1.get_row()},{c1.get_column()} and {c2.get_row()},{c2.get_column()} are the same pair {c1.get_possible_digits()}")
                             digits = list(c2.get_possible_digits())
