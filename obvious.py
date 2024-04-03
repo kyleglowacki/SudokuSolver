@@ -110,3 +110,34 @@ def sudoku_rule_pairs_in_col(grid):
                         grid[row][col].remove_possible_digit(d2)
                         updates = True
     return updates, grid
+
+def rule_find_pairs_and_triples(grid):
+    changes_made = False
+
+    # Find pairs and triples with same possible digits in rows
+    for row in range(9):
+        cells_with_two_or_three_digits = [cell for cell in grid[row] if 2 <= len(cell.get_possible_digits()) <= 3]
+        digit_combinations = {}
+
+        for cell in cells_with_two_or_three_digits:
+            possible_digits = cell.get_possible_digits()
+            if len(possible_digits) == 2 or len(possible_digits) == 3:
+                key = tuple(sorted(possible_digits))
+                if key in digit_combinations:
+                    digit_combinations[key].append(cell)
+                else:
+                    digit_combinations[key] = [cell]
+
+        for key, cells in digit_combinations.items():
+            if len(cells) == len(key):  # Pair or triple found
+                cells_with_change = [cell for cell in grid[row] if cell not in cells and not cell.get_digit()]
+                for cell in cells_with_change:
+                    changes = set(cell.get_possible_digits()) - set(key)
+                    if changes:
+                        for digit in changes:
+                            cell.remove_possible_digit(digit)
+                        changes_made = True
+
+    # Repeat the same process for columns and boxes
+
+    return changes_made, grid
