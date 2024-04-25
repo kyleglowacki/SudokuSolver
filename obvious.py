@@ -141,3 +141,47 @@ def rule_find_pairs_and_triples(grid):
     # Repeat the same process for columns and boxes
 
     return changes_made, grid
+
+# Look at each of the nine 3x3 boxes. Then look at each digit, 1-9.  If, 
+# within that box, all of the possible locations occur in the same row or 
+# same column, then that digit must be within that row or column in that box 
+# and therefore can be removed from the possible digits list of the rest of 
+# that row/column outside of that 3x3 box as applicable
+#
+def sudoku_rule_box_line_reduction(grid):
+    changes_made = False
+
+    # Check each 3x3 box
+    for box_row in range(0, 9, 3):
+        for box_col in range(0, 9, 3):
+            for digit in range(1, 10):
+                possible_locations = []
+                for row in range(box_row, box_row + 3):
+                    for col in range(box_col, box_col + 3):
+                        cell = grid[row][col]
+                        if digit in cell.get_possible_digits():
+                            possible_locations.append((row, col))
+
+                # Check if all possible locations occur in the same row
+                same_row = all(row == possible_locations[0][0] for row, _ in possible_locations)
+                if same_row:
+                    row = possible_locations[0][0]
+                    for col in range(9):
+                        if col < box_col or col >= box_col + 3:
+                            cell = grid[row][col]
+                            if digit in cell.get_possible_digits():
+                                cell.remove_possible_digit(digit)
+                                changes_made = True
+
+                # Check if all possible locations occur in the same column
+                same_col = all(col == possible_locations[0][1] for _, col in possible_locations)
+                if same_col:
+                    col = possible_locations[0][1]
+                    for row in range(9):
+                        if row < box_row or row >= box_row + 3:
+                            cell = grid[row][col]
+                            if digit in cell.get_possible_digits():
+                                cell.remove_possible_digit(digit)
+                                changes_made = True
+
+    return changes_made, grid
